@@ -58,8 +58,13 @@ jobs:
         if: success() && !(github.event_name == 'push' && contains(github.ref, 'refs/tags/')) # never cache dependencies for pushed tags
         uses: actions/cache@v2
         with:
-          path: External/
-          key: ${{ runner.os }}-${{ steps.prep.outputs.XCODE_VERSION }}-${{ matrix.platform }}-${{ hashFiles('fetchDependencies','ExternalRevisions/*','ExternalDependencies.xcodeproj/**') }}
+          path: External/build/
+          key: ${{ runner.os }}-${{ steps.prep.outputs.XCODE_VERSION }}-${{ matrix.platform }}-${{ hashFiles('fetchDependencies','ExternalRevisions/**','ExternalDependencies.xcodeproj/**','Scripts/**') }}
+
+      - name: Fetch Dependencies (Use Built Cache)
+        if: steps.cache-dependencies.outputs.cache-hit == 'true'
+        run: |
+          ./fetchDependencies -v --no-parallel-build --none
 
       - name: Fetch Dependencies
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
