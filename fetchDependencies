@@ -453,7 +453,7 @@ XC_PROJ="${EXT_DEPS}.xcodeproj"
 XC_DD_PATH="${EXT_DIR}/build"
 
 # Determine if xcpretty is present
-XCPRETTY_PATH=$(command -v xcpretty 2> /dev/null)
+XCPRETTY_PATH=$(command -v xcpretty 2> /dev/null || true) # ignore failures
 
 # If xcpretty is present, use it to format xcodebuild output
 XCPRETTY=""
